@@ -1,14 +1,21 @@
 import pgzrun  # first line/at the top
 
-wand = Actor("wand")
-wand.topright = 0, 10
+# Sounds from Freesound
+
 
 WIDTH = 500
 HEIGHT = 200
 
+potiong = Actor("potiong")
+potiong.center = WIDTH / 2, HEIGHT / 2
+wand = Actor("wand")
+wand.topright = 0, 10
+
+
 def draw():
     screen.fill((196, 164, 132))
     wand.draw()
+    potiong.draw()
 
 
 def update():
@@ -19,8 +26,11 @@ def update():
 
 def on_mouse_down(pos):
     if wand.collidepoint(pos):
-        print("Eek!")
-    else:
-        print("You missed me!")
+        GreenGIF.draw()
+        
+        pass
+        # sounds.shuffle_cards.play()
+        # wand.center
+
 
 pgzrun.go()  # last line/at the bottom
