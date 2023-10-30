@@ -37,6 +37,19 @@ greenGIF = [
 ]
 green_frame = 0
 potion_color = "static"
+green2purpleGIF = [
+    "green2purple1",
+    "green2purple2",
+    "green2purple3",
+    "green2purple4",
+    "green2purple5",
+    "green2purple6",
+    "green2purple7",
+    "green2purple8",
+    "green2purple9",
+    "green2purple10",
+]
+
 pumpkin_start = Actor("pumpkin_start")
 pumpkin_start.bottomright = WIDTH, HEIGHT
 
