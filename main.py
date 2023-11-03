@@ -6,6 +6,8 @@ import pgzrun  # first line/at the top
 WIDTH = 500
 HEIGHT = 200
 
+in_menu = True
+
 potiong = Actor("potiong")
 potiong.center = WIDTH / 2, HEIGHT / 2
 wand = Actor("wand")
@@ -16,21 +18,30 @@ pumpkin_start = Actor("pumpkin_start")
 pumpkin_start.bottomright = WIDTH, HEIGHT
 eyeball = Actor("eyeball")
 eyeball.bottomleft = 150, HEIGHT
+eyeball_play = Actor("eyeball_play")
+eyeball_play.center = WIDTH / 2, (HEIGHT / 2) + 16
+welcome = Actor("welcome")
+welcome.center = WIDTH / 2, (HEIGHT / 2) - 20
+spider_restart = Actor("spider_restart")
+spider_restart.topright = WIDTH, HEIGHT / 4
+rules = Actor("rules")
+rules.topleft = 0, HEIGHT / 2
+
 
 is_wand_started = False
 
 
 greenGIF = [
-    "greens/green1",
-    "greens/green2",
-    "greens/green3",
-    "greens/green4",
-    "greens/green5",
-    "greens/green6",
-    "greens/green7",
-    "greens/green8",
-    "greens/green9",
-    "greens/green10",
+    "greens/green (1)",
+    "greens/green (2)",
+    "greens/green (3)",
+    "greens/green (4)",
+    "greens/green (5)",
+    "greens/green (6)",
+    "greens/green (7)",
+    "greens/green (8)",
+    "greens/green (9)",
+    "greens/green (10)",
 ]
 green_frame = 0
 potion_color = "static"
@@ -60,15 +71,34 @@ purpleGIF = [
     "purples/purple (10)",
 ]
 purple_frame = 0
+blueGIF = [
+    "blues/blue (1)",
+    "blues/blue (2)",
+    "blues/blue (3)",
+    "blues/blue (4)",
+    "blues/blue (5)",
+    "blues/blue (6)",
+    "blues/blue (7)",
+    "blues/blue (8)",
+    "blues/blue (9)",
+    "blues/blue (10)",
+]
+blue_frame = 0
 
 
 def draw():
     screen.fill((196, 164, 132))
-    wand.draw()
-    potiong.draw()
-    pumpkin_start.draw()
-    bat.draw()
-    eyeball.draw()
+    if in_menu:
+        eyeball_play.draw()
+        welcome.draw()
+        rules.draw()
+    else:
+        wand.draw()
+        potiong.draw()
+        pumpkin_start.draw()
+        bat.draw()
+        eyeball.draw()
+        spider_restart.draw()
 
 
 def update():
@@ -76,6 +106,7 @@ def update():
     global purple_frame
     global green2purple_frame
     global potion_color
+    global blue_frame
 
     if potion_color == "static":
         potiong.image = "potiong"
@@ -87,11 +118,16 @@ def update():
         potiong.image = green2purpleGIF[green2purple_frame // 5]
         green2purple_frame += 1
         if green2purple_frame == len(green2purpleGIF) * 5:
+            green2purple_frame = 0
             potion_color = "purple"
     elif potion_color == "purple":
         potiong.image = purpleGIF[purple_frame // 5]
         purple_frame += 1
         purple_frame %= len(purpleGIF) * 5
+    elif potion_color == "blue":
+        potiong.image == blueGIF[blue_frame // 5]
+        blue_frame += 1
+        blue_frame %= len(blueGIF) * 5
 
     if is_wand_started:
         wand.left += 2
@@ -102,14 +138,21 @@ def update():
 def on_mouse_down(pos):
     global potion_color
     global is_wand_started
+    global in_menu
     if wand.collidepoint(pos):
         potion_color = "green"
     if bat.collidepoint(pos):
         potion_color = "green2purple"
     if pumpkin_start.collidepoint(pos):
         is_wand_started = True
-
-    pass
+    if spider_restart.collidepoint(pos):
+        potion_color = "static"
+        is_wand_started = False
+        in_menu = True
+    if eyeball_play.collidepoint(pos):
+        in_menu = False
+    if eyeball.collidepoint(pos):
+        potion_color = "blue"
 
     # sounds.shuffle_cards.play()
     # wand.center
