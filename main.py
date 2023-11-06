@@ -23,12 +23,15 @@ eyeball_play.center = WIDTH / 2, (HEIGHT / 2) + 16
 welcome = Actor("welcome")
 welcome.center = WIDTH / 2, (HEIGHT / 2) - 20
 spider_restart = Actor("spider_restart")
-spider_restart.topright = WIDTH, HEIGHT / 4
+spider_restart.bottomright = (WIDTH / 2) + 150, HEIGHT + 20
 rules = Actor("rules")
 rules.topleft = 0, HEIGHT / 2
+author = Actor("author")
+author.bottomright = WIDTH, HEIGHT
 
 
 is_wand_started = False
+is_bat_started = False
 
 
 greenGIF = [
@@ -92,6 +95,7 @@ def draw():
         eyeball_play.draw()
         welcome.draw()
         rules.draw()
+        author.draw()
     else:
         wand.draw()
         potiong.draw()
@@ -125,7 +129,7 @@ def update():
         purple_frame += 1
         purple_frame %= len(purpleGIF) * 5
     elif potion_color == "blue":
-        potiong.image == blueGIF[blue_frame // 5]
+        potiong.image = blueGIF[blue_frame // 5]
         blue_frame += 1
         blue_frame %= len(blueGIF) * 5
 
@@ -134,13 +138,20 @@ def update():
         if wand.left > WIDTH:
             wand.right = 0
 
+    if is_bat_started:
+        bat.bottom -= 2
+        if bat.bottom < 0:
+            bat.top = HEIGHT
+
 
 def on_mouse_down(pos):
     global potion_color
     global is_wand_started
     global in_menu
+    global is_bat_started
     if wand.collidepoint(pos):
         potion_color = "green"
+        is_bat_started = True
     if bat.collidepoint(pos):
         potion_color = "green2purple"
     if pumpkin_start.collidepoint(pos):
@@ -149,10 +160,12 @@ def on_mouse_down(pos):
         potion_color = "static"
         is_wand_started = False
         in_menu = True
+        is_bat_started = False
     if eyeball_play.collidepoint(pos):
         in_menu = False
     if eyeball.collidepoint(pos):
         potion_color = "blue"
+        #print("Eyeball clicked")
 
     # sounds.shuffle_cards.play()
     # wand.center
