@@ -32,6 +32,9 @@ author.bottomright = WIDTH, HEIGHT
 
 is_wand_started = False
 is_bat_started = False
+is_eyeball_started = False
+eyeball_direction = "right"
+eyeball_movement_amount = 0
 
 
 greenGIF = [
@@ -111,6 +114,8 @@ def update():
     global green2purple_frame
     global potion_color
     global blue_frame
+    global eyeball_direction
+    global eyeball_movement_amount
 
     if potion_color == "static":
         potiong.image = "potiong"
@@ -143,29 +148,59 @@ def update():
         if bat.bottom < 0:
             bat.top = HEIGHT
 
+    if is_eyeball_started:
+        if eyeball_direction == "right":
+            eyeball.left += 1
+            eyeball_movement_amount += 1
+            if eyeball_movement_amount >= 10:
+                eyeball_movement_amount = 0
+                eyeball_direction = "up"
+        if eyeball_direction == "up":
+            eyeball.top -= 1
+            eyeball_movement_amount += 1
+            if eyeball_movement_amount >= 10:
+                eyeball_movement_amount = 0
+                eyeball_direction = "left"
+        if eyeball_direction == "left":
+            eyeball.left -= 1
+            eyeball_movement_amount += 1
+            if eyeball_movement_amount >= 10:
+                eyeball_movement_amount = 0
+                eyeball_direction = "down"
+        if eyeball_direction == "down":
+            eyeball.top += 1
+            eyeball_movement_amount += 1
+            if eyeball_movement_amount >= 10:
+                eyeball_movement_amount = 0
+                eyeball_direction = "right"
+
 
 def on_mouse_down(pos):
     global potion_color
     global is_wand_started
     global in_menu
     global is_bat_started
+    global is_eyeball_started
     if wand.collidepoint(pos):
         potion_color = "green"
         is_bat_started = True
     if bat.collidepoint(pos):
         potion_color = "green2purple"
+        is_eyeball_started = True
     if pumpkin_start.collidepoint(pos):
         is_wand_started = True
+        # sounds.hedwig.play()
     if spider_restart.collidepoint(pos):
         potion_color = "static"
         is_wand_started = False
         in_menu = True
         is_bat_started = False
+        is_eyeball_started = False
     if eyeball_play.collidepoint(pos):
         in_menu = False
     if eyeball.collidepoint(pos):
         potion_color = "blue"
-        #print("Eyeball clicked")
+        # print("Eyeball clicked")
 
     # sounds.shuffle_cards.play()
     # wand.center
